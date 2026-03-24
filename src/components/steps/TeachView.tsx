@@ -11,7 +11,7 @@ interface Props {
 
 export default function TeachView({ step, onNext, onBack }: Props) {
   const handleSpeak = () => {
-    const soundOn = localStorage.getItem('suttalog3-sound') !== 'off'
+    const soundOn = localStorage.getItem('suttalog4-sound') !== 'off'
     if (soundOn) speakPali(step.word)
   }
 

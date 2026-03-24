@@ -20,12 +20,12 @@ export default function VerseView({ step, onNext, onBack }: Props) {
   const handleWordTap = (word: VerseWord, idx: number) => {
     setHighlightIdx(prev => prev === idx ? null : idx)
     trackWordView(word.pali)
-    const soundOn = localStorage.getItem('suttalog3-sound') !== 'off'
+    const soundOn = localStorage.getItem('suttalog4-sound') !== 'off'
     if (soundOn) speakPali(word.pali)
   }
 
   const handleListenAll = () => {
-    const soundOn = localStorage.getItem('suttalog3-sound') !== 'off'
+    const soundOn = localStorage.getItem('suttalog4-sound') !== 'off'
     if (soundOn) speakPali(step.pali)
   }
 

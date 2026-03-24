@@ -8,6 +8,7 @@ import { addWrongAnswer, recordCorrect, recordWrong } from '../../utils/wrong-tr
 import { recordStudyTime } from '../../utils/study-tracker'
 import { incrementRepeat, getReviewTargets, getRepeatStatus } from '../../utils/ebbinghaus'
 import { genMeaningQuiz, genReverseQuiz } from '../../data/quiz-generator'
+import { stopPali } from '../../utils/pali-tts'
 import ProgressBar from '../../components/ProgressBar'
 import IntroView from '../../components/steps/IntroView'
 import TeachView from '../../components/steps/TeachView'
@@ -80,9 +81,10 @@ export default function LearnEngine({ reviewMode = false }: LearnEngineProps) {
   const steps = stepsWithReview
   const total = steps.length
 
-  const handleClose = () => navigate(-1)
+  const handleClose = () => { stopPali(); navigate(-1) }
 
   const handleBack = useCallback(() => {
+    stopPali()
     if (currentStep > 0) {
       setCurrentStep(prev => prev - 1)
       setStepKey(prev => prev + 1)
@@ -90,6 +92,7 @@ export default function LearnEngine({ reviewMode = false }: LearnEngineProps) {
   }, [currentStep])
 
   const advance = useCallback(() => {
+    stopPali()
     if (currentStep + 1 >= total) {
       setIsComplete(true)
       if (!reviewMode) {
