@@ -13,6 +13,9 @@ function getProgress(lessonId: string): number {
 
 // ── 문법 학습 경로 (주요 목차) ──
 // 각 문법 항목이 어떤 경전 과에서 배울 수 있는지 매핑
+// 문법 경로: 문법 순서 유지 + 경전도 순서대로 진행
+// 원칙: 각 문법 항목은 "그 시점까지 도달한 경전"에서만 참조
+// 경전 진행: 행복경 → 보배경 → 자비경 → 전법륜경 → 무아경 → 법구경 → 사념처경
 const GRAMMAR_SECTIONS = [
   {
     title: '기초',
@@ -26,16 +29,30 @@ const GRAMMAR_SECTIONS = [
     title: '명사 격변화 (1-8과)',
     icon: '📐',
     color: '#5B21B6',
-    subtitle: '행복경 서문에서 격변화를 배웁니다',
+    subtitle: '행복경에서 격변화를 배웁니다',
     items: [
-      { label: '주격: ~은/는 (-o/-ā)', lesson: 'mangala-01', note: '행복경 서문 bhagavā' },
-      { label: '목적격: ~을/를 (-ṃ/-e)', lesson: 'mangala-01', note: '행복경 서문 samayaṃ, dhammaṃ' },
+      { label: '주격: ~은/는 (-o/-ā)', lesson: 'mangala-01', note: 'bhagavā(세존은)' },
+      { label: '목적격: ~을/를 (-ṃ/-e)', lesson: 'mangala-01', note: 'samayaṃ(때를), dhammaṃ(법을)' },
+      { label: '소유격: ~의 (-ssa/-ānaṃ)', lesson: 'mangala-01', note: 'Anāthapiṇḍikassa(~의)' },
+      { label: '처소격: ~에서 (-yaṃ/-e/-smiṃ)', lesson: 'mangala-01', note: 'Sāvatthiyaṃ, Jetavane, ārāme' },
       { label: '구격: ~에 의해 (-ena/-ehi)', lesson: 'mangala-02', note: '행복경 2-3게송' },
       { label: '여격·탈격: ~에게, ~로부터', lesson: 'mangala-02', note: '행복경 2-3게송' },
-      { label: '소유격: ~의 (-ssa/-ānaṃ)', lesson: 'mangala-01', note: '행복경 서문 Anāthapiṇḍikassa' },
-      { label: '처소격: ~에서 (-yaṃ/-e/-smiṃ)', lesson: 'mangala-01', note: '행복경 서문 Sāvatthiyaṃ, Jetavane' },
-      { label: '호격: ~이여 (-a/-ā)', lesson: 'dhammacakka-01', note: '전법륜경 bhikkhave' },
-      { label: '격변화 종합 정리', lesson: 'mangala-03', note: '행복경 4-6게송 반복 연습' },
+      { label: '호격: ~이여 (-a/-ā)', lesson: 'mangala-03', note: '행복경 bhikkhave' },
+      { label: '격변화 종합 정리', lesson: 'mangala-03', note: '행복경 4-6게송 복습' },
+    ],
+  },
+  {
+    title: '동사 + 분사 기초 (9-13과)',
+    icon: '📐',
+    color: '#5B21B6',
+    subtitle: '행복경에서 동사·분사를 배웁니다',
+    items: [
+      { label: '동사 현재형 (-ti/-nti)', lesson: 'mangala-01', note: 'viharati(머무시다)' },
+      { label: '명령형: ~하라 (-tu/-hi)', lesson: 'mangala-01', note: 'brūhi(말씀해 주소서)' },
+      { label: '과거형: ~했다 (a- 어두첨자)', lesson: 'mangala-02', note: 'acintayuṃ(생각했다)' },
+      { label: '과거분사: ~된 (-ta/-na)', lesson: 'mangala-01', note: 'sutaṃ(들은 것)' },
+      { label: '현재분사: ~하는 (-māna)', lesson: 'mangala-02', note: 'ākaṅkhamānā(바라면서)' },
+      { label: '절대분사: ~하고 나서 (-tvā)', lesson: 'mangala-04', note: 'katvāna(행하고 나서)' },
     ],
   },
   {
@@ -51,28 +68,14 @@ const GRAMMAR_SECTIONS = [
     ],
   },
   {
-    title: '동사 활용 (9-13과)',
-    icon: '📐',
-    color: '#5B21B6',
-    subtitle: '경전 속 동사 형태를 익힙니다',
-    items: [
-      { label: '절대분사: ~하고 나서 (-tvā)', lesson: 'mangala-04', note: '행복경 katvāna' },
-      { label: '부정사: ~하기 위해 (-tuṃ)', lesson: 'anatta-01', note: '무아경 samanupassituṃ' },
-      { label: '중성명사 (dukkhaṃ, rūpaṃ)', lesson: 'dhammacakka-01', note: '전법륜경 사성제' },
-      { label: '동사 현재형 (-ti/-nti)', lesson: 'mangala-01', note: '행복경 viharati' },
-      { label: '특수동사 (pajānāti, atthi)', lesson: 'dhammacakka-02', note: '전법륜경' },
-    ],
-  },
-  {
     title: '시제 변화 (14-18과)',
     icon: '📐',
     color: '#5B21B6',
+    subtitle: '보배경·자비경에서 시제를 배웁니다',
     items: [
       { label: '미래형: ~할 것이다 (-ssa-)', lesson: 'ratana-01', note: '보배경' },
-      { label: '원망형: ~해야 한다 (-eyya)', lesson: 'metta-01', note: '자비경 bhāvaye' },
-      { label: '명령형: ~하라 (-tu/-hi)', lesson: 'mangala-01', note: '행복경 brūhi' },
-      { label: '과거형: ~했다 (a- 어두첨자)', lesson: 'mangala-02', note: '행복경 acintayuṃ' },
-      { label: 'ā-여성명사 (vedanā, paññā)', lesson: 'anatta-02', note: '무아경 오온' },
+      { label: '원망형: ~해야 한다 (-eyya)', lesson: 'ratana-02', note: '보배경' },
+      { label: 'ā-여성명사 (vedanā, paññā)', lesson: 'metta-01', note: '자비경' },
     ],
   },
   {
@@ -89,15 +92,14 @@ const GRAMMAR_SECTIONS = [
     ],
   },
   {
-    title: '분사 (19-22과)',
+    title: '분사 심화 + 중성명사 (19-22과)',
     icon: '📐',
     color: '#5B21B6',
-    subtitle: '동사에서 파생된 형용사',
+    subtitle: '전법륜경에서 분사·중성명사를 배웁니다',
     items: [
-      { label: '과거분사: ~된 (-ta/-na)', lesson: 'mangala-01', note: '행복경 sutaṃ' },
-      { label: '현재분사: ~하는 (-nta/-māna)', lesson: 'mangala-02', note: '행복경 ākaṅkhamānā' },
-      { label: '미래수동분사: ~해야 할 (-tabba)', lesson: 'dhammacakka-03', note: '전법륜경 pariññeyyaṃ' },
-      { label: 'i/ī-여성명사 (jāti, nadī)', lesson: 'anatta-03', note: '무아경 jāti' },
+      { label: '중성명사 (dukkhaṃ, rūpaṃ)', lesson: 'dhammacakka-01', note: '사성제' },
+      { label: '특수동사 (pajānāti, atthi)', lesson: 'dhammacakka-02', note: '전법륜경' },
+      { label: '미래수동분사: ~해야 할 (-tabba)', lesson: 'dhammacakka-03', note: 'pariññeyyaṃ' },
     ],
   },
   {
@@ -105,21 +107,22 @@ const GRAMMAR_SECTIONS = [
     icon: '☸️',
     color: '#7C3AED',
     items: [
-      { label: '전법륜경 (1) 제1-4단락', lesson: 'dhammacakka-01' },
-      { label: '전법륜경 (2) 제5-8단락', lesson: 'dhammacakka-02' },
-      { label: '전법륜경 (3) 제9-12단락', lesson: 'dhammacakka-03' },
-      { label: '전법륜경 (4) 제13-15단락', lesson: 'dhammacakka-04' },
+      { label: '전법륜경 (1) 사성제 선언', lesson: 'dhammacakka-01' },
+      { label: '전법륜경 (2) 고·집·멸·도', lesson: 'dhammacakka-02' },
+      { label: '전법륜경 (3) 삼전십이행상', lesson: 'dhammacakka-03' },
+      { label: '전법륜경 (4) 결론', lesson: 'dhammacakka-04' },
     ],
   },
   {
-    title: '고급 명사 (23-29과)',
+    title: '고급 명사 + 오온 (23-29과)',
     icon: '📐',
     color: '#5B21B6',
+    subtitle: '무아경에서 다양한 명사를 배웁니다',
     items: [
-      { label: '사역형: ~하게 하다 (-āpeti)', lesson: 'anatta-01', note: '무아경' },
-      { label: 'u/ū-남성명사 (bhikkhu)', lesson: 'dhammacakka-01', note: '전법륜경' },
+      { label: 'i/ī-여성명사 (jāti, vedanā)', lesson: 'anatta-01', note: '무아경 오온' },
+      { label: '부정사: ~하기 위해 (-tuṃ)', lesson: 'anatta-01', note: 'samanupassituṃ' },
+      { label: '사역형: ~하게 하다 (-āpeti)', lesson: 'anatta-03', note: '무아경' },
       { label: '자음어간 명사 (satthā=스승)', lesson: 'anatta-04', note: '무아경' },
-      { label: '-vantu/-mantu 형용사 (bhagavā)', lesson: 'mangala-01', note: '행복경' },
     ],
   },
   {
@@ -146,6 +149,7 @@ const GRAMMAR_SECTIONS = [
     title: '대명사 · 복합어 (30-32과)',
     icon: '📐',
     color: '#5B21B6',
+    subtitle: '사념처경에서 고급 문법을 배웁니다',
     items: [
       { label: '인칭대명사 (ahaṃ, tvaṃ)', lesson: 'satipatthana-01', note: '사념처경' },
       { label: '지시·관계·의문대명사', lesson: 'satipatthana-02', note: '사념처경' },
