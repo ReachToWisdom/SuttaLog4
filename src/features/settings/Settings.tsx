@@ -1,13 +1,15 @@
-// 설정 화면 — 소리/문법힌트/동기화/초기화
+// 설정 화면 — 소리/문법힌트/글꼴/동기화/초기화
 import { useState } from 'react'
 import { STORAGE_PREFIX, APP_NAME, APP_VERSION, getGrammarHintEnabled, setGrammarHintEnabled } from '../../config'
 import { isSyncConfigured, syncLogin, syncLogout, pullFromCloud, pushToCloud } from '../../utils/sync'
+import { FONT_SIZES, getSavedFontSize, setFontSize, type FontSizeKey } from '../../utils/font-size'
 
 export default function Settings() {
   const [sound, setSound] = useState(localStorage.getItem(`${STORAGE_PREFIX}sound`) !== 'off')
   const [pronShow, setPronShow] = useState(localStorage.getItem(`${STORAGE_PREFIX}pronunciation`) !== 'off')
   const [pronEn, setPronEn] = useState(localStorage.getItem(`${STORAGE_PREFIX}pron-en`) === 'on')
   const [grammarHint, setGrammarHint] = useState(getGrammarHintEnabled())
+  const [fontSize, setFontSizeState] = useState<FontSizeKey>(getSavedFontSize())
   const [syncing, setSyncing] = useState(false)
 
   const toggleSound = () => {
@@ -115,6 +117,27 @@ export default function Settings() {
         <SettingRow label="영어 발음 병기" description="한글 발음 옆에 영어 발음 표시">
           <ToggleButton on={pronEn} onToggle={togglePronEn} />
         </SettingRow>
+      </div>
+
+      {/* 글꼴 크기 */}
+      <div className="mt-3">
+        <div className="p-4 rounded-xl border"
+          style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border-light)' }}>
+          <p className="font-medium mb-2" style={{ color: 'var(--color-text)' }}>글꼴 크기</p>
+          <div className="flex gap-2">
+            {FONT_SIZES.map(s => (
+              <button
+                key={s.key}
+                onClick={() => { setFontSize(s.key); setFontSizeState(s.key) }}
+                className="flex-1 py-2 rounded-lg text-xs font-semibold transition-all"
+                style={{
+                  background: fontSize === s.key ? 'var(--color-primary)' : 'var(--color-surface-hover)',
+                  color: fontSize === s.key ? '#fff' : 'var(--color-text-secondary)',
+                }}
+              >{s.label}</button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* 동기화 */}

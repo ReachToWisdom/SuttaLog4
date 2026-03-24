@@ -216,12 +216,30 @@ function TabButton({ active, onClick, label }: {
 export default function Courses() {
   const navigate = useNavigate()
   const [viewMode, setViewMode] = useState<ViewMode>('grammar')
+  const [search, setSearch] = useState('')
 
   return (
     <div className="pb-20 px-4 pt-6 max-w-lg mx-auto">
       <h1 className="text-xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
         목차
       </h1>
+
+      {/* 검색 */}
+      <div className="mb-4">
+        <input
+          type="text"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="과목 검색 (예: 목적격, 행복경, bhagavā)"
+          className="w-full px-4 py-2.5 rounded-xl text-sm"
+          style={{
+            background: 'var(--color-surface)',
+            border: '1px solid var(--color-border-light)',
+            color: 'var(--color-text)',
+            outline: 'none',
+          }}
+        />
+      </div>
 
       {/* 탭 전환: 문법 경로 (주) / 경전 경로 (보조) */}
       <div className="flex gap-2 mb-6 p-1 rounded-xl"
@@ -239,19 +257,25 @@ export default function Courses() {
       </div>
 
       {viewMode === 'grammar' ? (
-        <GrammarView navigate={navigate} />
+        <GrammarView navigate={navigate} search={search} />
       ) : (
-        <SuttaView navigate={navigate} />
+        <SuttaView navigate={navigate} search={search} />
       )}
     </div>
   )
 }
 
 /** 문법 경로 뷰 (주요 목차) */
-function GrammarView({ navigate }: { navigate: ReturnType<typeof useNavigate> }) {
+function GrammarView({ navigate, search }: { navigate: ReturnType<typeof useNavigate>; search: string }) {
+  const q = search.toLowerCase().trim()
   return (
     <div>
-      {GRAMMAR_SECTIONS.map((section, si) => (
+      {GRAMMAR_SECTIONS.map((section, si) => {
+        const filteredItems = q
+          ? section.items.filter(item => item.label.toLowerCase().includes(q) || ((item as { note?: string }).note?.toLowerCase().includes(q) ?? false))
+          : section.items
+        if (q && filteredItems.length === 0) return null
+        return (
         <div key={si} className="mb-6">
           {/* 섹션 헤더 */}
           <div className="flex items-center gap-3 mb-2 px-1">
@@ -275,7 +299,7 @@ function GrammarView({ navigate }: { navigate: ReturnType<typeof useNavigate> })
 
           {/* 항목 리스트 */}
           <div className="flex flex-col gap-2">
-            {section.items.map((item, ii) => {
+            {filteredItems.map((item, ii) => {
               const pct = getProgress(item.lesson)
               const done = pct >= 100
               const inProgress = pct > 0 && !done
@@ -306,9 +330,9 @@ function GrammarView({ navigate }: { navigate: ReturnType<typeof useNavigate> })
                     <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
                       {item.label}
                     </p>
-                    {'note' in item && item.note && (
+                    {(item as { note?: string }).note && (
                       <p className="text-[10px] mt-0.5" style={{ color: 'var(--color-text-tertiary)' }}>
-                        📖 {item.note}
+                        📖 {(item as { note?: string }).note}
                       </p>
                     )}
                   </div>
@@ -326,19 +350,21 @@ function GrammarView({ navigate }: { navigate: ReturnType<typeof useNavigate> })
             })}
           </div>
         </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
 
 /** 경전 경로 뷰 (보조 목차) */
-function SuttaView({ navigate }: { navigate: ReturnType<typeof useNavigate> }) {
+function SuttaView({ navigate, search }: { navigate: ReturnType<typeof useNavigate>; search: string }) {
   const allLessons = buildAllLessons()
+  const q = search.toLowerCase().trim()
 
   return (
     <div>
       {CATEGORIES.map((cat) => {
-        const lessons = allLessons.filter(l => l.category === cat.key)
+        const lessons = allLessons.filter(l => l.category === cat.key && (!q || l.title.toLowerCase().includes(q) || l.subtitle.toLowerCase().includes(q)))
         if (lessons.length === 0) return null
 
         return (

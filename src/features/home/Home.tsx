@@ -252,6 +252,72 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* ── 미니 캘린더 (이번 달) ── */}
+      <MiniCalendar />
+    </div>
+  )
+}
+
+/** 홈 미니 캘린더 */
+function MiniCalendar() {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth()
+  const todayStr = now.toISOString().slice(0, 10)
+  const firstDow = new Date(year, month, 1).getDay()
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+
+  // 학습한 날짜 Set
+  const studyDates = (() => {
+    try {
+      const log = JSON.parse(localStorage.getItem('suttalog4-study-log') || '{}')
+      const prefix = `${year}-${String(month + 1).padStart(2, '0')}`
+      const s = new Set<string>()
+      for (const [key, val] of Object.entries(log)) {
+        if (key.startsWith(prefix) && (val as { minutes: number }).minutes > 0) s.add(key)
+      }
+      return s
+    } catch { return new Set<string>() }
+  })()
+
+  return (
+    <div
+      className="rounded-2xl p-4 mt-5 card-shadow animate-slideUp delay-3"
+      style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border-light)' }}
+    >
+      <p className="text-sm font-bold mb-3" style={{ color: 'var(--color-text-secondary)' }}>
+        {month + 1}월 학습 현황
+      </p>
+      <div className="grid grid-cols-7 gap-1 mb-1">
+        {['일', '월', '화', '수', '목', '금', '토'].map(d => (
+          <div key={d} className="text-center text-[9px] font-semibold"
+            style={{ color: d === '일' ? '#EF5350' : d === '토' ? '#42A5F5' : 'var(--color-text-tertiary)' }}>
+            {d}
+          </div>
+        ))}
+      </div>
+      <div className="grid grid-cols-7 gap-1">
+        {Array.from({ length: firstDow }).map((_, i) => <div key={`e${i}`} />)}
+        {Array.from({ length: daysInMonth }).map((_, i) => {
+          const day = i + 1
+          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+          const hasStudy = studyDates.has(dateStr)
+          const isToday = dateStr === todayStr
+          return (
+            <div
+              key={day}
+              className="aspect-square flex items-center justify-center rounded-lg text-[10px]"
+              style={{
+                backgroundColor: hasStudy ? 'color-mix(in srgb, var(--color-primary) 18%, transparent)' : 'transparent',
+                border: isToday ? '1.5px solid var(--color-primary)' : 'none',
+                color: hasStudy ? 'var(--color-primary)' : 'var(--color-text-tertiary)',
+                fontWeight: hasStudy ? 700 : 400,
+              }}
+            >{day}</div>
+          )
+        })}
+      </div>
     </div>
   )
 }
