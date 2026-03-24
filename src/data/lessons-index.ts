@@ -47,6 +47,15 @@ import {
 } from './satipatthana-dhamma'
 import { genMeaningQuiz, genReverseQuiz } from './quiz-generator'
 import { getGrammarHintEnabled } from '../config'
+import {
+  GRAMMAR_03_INSTRUMENTAL,
+  GRAMMAR_04_ABLATIVE,
+  GRAMMAR_05_DATIVE,
+  GRAMMAR_08_VOCATIVE,
+  GRAMMAR_10_INFINITIVE,
+  GRAMMAR_13_SPECIAL_VERBS,
+  GRAMMAR_18_FEMININE,
+} from './grammar-textbook'
 
 // ── 유틸리티 ──
 
@@ -396,20 +405,53 @@ function buildDhammaLessons(): LessonInfo[] {
 // 전체 과 목록 (경전 순서)
 // ══════════════════════════════════════════
 
-/** 전체 과 목록 생성 (문법 힌트 설정에 따라 동적 구성) */
+// ══════════════════════════════════════════
+// 교재 보충 과 (경전에 없는 문법)
+// ══════════════════════════════════════════
+function makeTextbookLesson(id: string, title: string, subtitle: string, icon: string, category: LessonInfo['category'], steps: Step[]): LessonInfo {
+  return { id, title, subtitle, icon, category, steps }
+}
+
+/** 전체 과 목록 생성 — 문법 순서대로, 경전 사이에 교재 보충 삽입 */
 export function buildAllLessons(): LessonInfo[] {
   return [
+    // ── 기초 + 격변화 (1-8과) ──
     buildAlphabet(),
+    // 1-2과(주격/목적격): 행복경 서문에서 충분
     buildMangala01(),
+    // 3과 구격: 교재 보충 (행복경에 부족)
+    makeTextbookLesson('grammar-03', '3과: 구격', '~에 의해, ~(으)로', '📐', 'basic', GRAMMAR_03_INSTRUMENTAL),
+    // 4과 탈격: 교재 보충
+    makeTextbookLesson('grammar-04', '4과: 탈격', '~로부터', '📐', 'basic', GRAMMAR_04_ABLATIVE),
+    // 5과 여격: 교재 보충
+    makeTextbookLesson('grammar-05', '5과: 여격', '~에게', '📐', 'basic', GRAMMAR_05_DATIVE),
+    // 6-7과(소유격/처소격): 행복경 2-3게송에서
     buildMangala02(),
     buildMangala03(),
+    // 8과 호격: 교재 보충 (행복경에 없음)
+    makeTextbookLesson('grammar-08', '8과: 호격', '~이여', '📐', 'basic', GRAMMAR_08_VOCATIVE),
+    // ── 행복경 나머지 ──
     buildMangala04(),
     buildMangala05(),
+    // ── 동사 (9-13과) ──
+    // 9과(절대분사): 행복경에서 katvāna로 충분 → mangala-04에서 커버
+    // 10과 부정사: 교재 보충 (행복경에 없음)
+    makeTextbookLesson('grammar-10', '10과: 부정사', '~하기 위해 (-tuṃ)', '📐', 'basic', GRAMMAR_10_INFINITIVE),
+    // 13과 특수동사+인칭변화: 교재 보충 (삼귀의)
+    makeTextbookLesson('grammar-13', '13과: 특수동사', 'atthi, karoti, 삼귀의', '📐', 'basic', GRAMMAR_13_SPECIAL_VERBS),
+    // ── 시제 + 여성명사 (14-18과) ──
+    // 18과 ā-여성명사: 교재 보충 (보배경/자비경 전에 필요)
+    makeTextbookLesson('grammar-18', '18과: ā-여성명사', 'vedanā, paññā, taṇhā', '📐', 'basic', GRAMMAR_18_FEMININE),
+    // ── 보배경 · 자비경 ──
     ...buildRatanaLessons(),
     ...buildMettaLessons(),
+    // ── 전법륜경 ──
     ...buildDhammacakkaLessons(),
+    // ── 무아경 ──
     ...buildAnattaLessons(),
+    // ── 법구경 ──
     ...buildDhammapadaLessons(),
+    // ── 사념처경 ──
     ...buildKayaLessons(),
     ...buildDhammaLessons(),
   ]
@@ -422,7 +464,7 @@ export function getLessonById(id: string): LessonInfo | undefined {
 
 /** 카테고리 정의 */
 export const CATEGORIES = [
-  { key: 'basic', label: '기초', icon: '🔤' },
+  { key: 'basic', label: '기초 + 문법', icon: '📐' },
   { key: 'mangala', label: '행복경', icon: '🪷' },
   { key: 'ratana', label: '보배경', icon: '💎' },
   { key: 'metta', label: '자비경', icon: '💗' },
