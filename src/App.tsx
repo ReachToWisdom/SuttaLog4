@@ -5,6 +5,7 @@ import Home from './features/home/Home'
 import Courses from './features/courses/Courses'
 import Review from './features/review/Review'
 import Settings from './features/settings/Settings'
+import Stats from './features/stats/Stats'
 import LearnEngine from './features/learn/LearnEngine'
 import BottomNav from './components/BottomNav'
 import { initSync, isSyncConfigured } from './utils/sync'
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/review" element={<Review />} />
+        <Route path="/stats" element={<Stats />} />
         <Route path="/profile" element={<Settings />} />
         <Route path="/learn/:lessonId" element={<LearnEngine />} />
         <Route path="/review-learn/:lessonId" element={<LearnEngine reviewMode />} />

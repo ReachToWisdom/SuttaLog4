@@ -5,6 +5,7 @@ const TABS = [
   { path: '/', label: '홈', icon: '🏠' },
   { path: '/courses', label: '목차', icon: '📚' },
   { path: '/review', label: '복습', icon: '🔄' },
+  { path: '/stats', label: '기록', icon: '📊' },
   { path: '/profile', label: '설정', icon: '⚙️' },
 ] as const
 
