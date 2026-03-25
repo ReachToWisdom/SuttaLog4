@@ -49,5 +49,5 @@ export const ROUTES = {
 } as const
 
 // ── 앱 정보 ──
-export const APP_NAME = '빠알리 경전 읽기'
+export const APP_NAME = '빠알리어 공부4'
 export const APP_VERSION = '0.1.0'
