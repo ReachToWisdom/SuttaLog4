@@ -48,6 +48,10 @@ import {
 import { genMeaningQuiz, genReverseQuiz } from './quiz-generator'
 import { getGrammarHintEnabled } from '../config'
 import {
+  ALPHABET_REFERENCE,
+  SANDHI_LESSON,
+  DECLENSION_INTRO,
+  VERB_INTRO,
   GRAMMAR_03_INSTRUMENTAL,
   GRAMMAR_04_ABLATIVE,
   GRAMMAR_05_DATIVE,
@@ -415,9 +419,13 @@ function makeTextbookLesson(id: string, title: string, subtitle: string, icon: s
 /** 전체 과 목록 생성 — 문법 순서대로, 경전 사이에 교재 보충 삽입 */
 export function buildAllLessons(): LessonInfo[] {
   return [
-    // ── 기초 + 격변화 (1-8과) ──
+    // ── 기초: 자모표 레퍼런스 + 자모 학습 + 연성법 ──
+    makeTextbookLesson('alphabet-ref', '자모표 (교재 요약)', '모음 8 + 자음 33 = 41자모', '📖', 'basic', ALPHABET_REFERENCE),
     buildAlphabet(),
-    // 1-2과(주격/목적격): 행복경 서문에서 충분
+    makeTextbookLesson('sandhi', '연성법 (Sandhi)', '단어 연결 규칙', '🔗', 'basic', SANDHI_LESSON),
+    // ── 격변화 도표 인트로 (교재 §1~§3) ──
+    makeTextbookLesson('declension-ref', '격변화 도표 (교재 요약)', '8격 × 남성/중성/여성', '📐', 'basic', DECLENSION_INTRO),
+    // ── 격변화 (1-8과) ──
     buildMangala01(),
     // 3과 구격: 교재 보충 (행복경에 부족)
     makeTextbookLesson('grammar-03', '3과: 구격', '~에 의해, ~(으)로', '📐', 'basic', GRAMMAR_03_INSTRUMENTAL),
@@ -433,8 +441,9 @@ export function buildAllLessons(): LessonInfo[] {
     // ── 행복경 나머지 ──
     buildMangala04(),
     buildMangala05(),
+    // ── 동사 활용표 인트로 ──
+    makeTextbookLesson('verb-ref', '동사 활용표 (교재 요약)', '현재형·과거형·미래형·명령형·원망형', '📐', 'basic', VERB_INTRO),
     // ── 동사 (9-13과) ──
-    // 9과(절대분사): 행복경에서 katvāna로 충분 → mangala-04에서 커버
     // 10과 부정사: 교재 보충 (행복경에 없음)
     makeTextbookLesson('grammar-10', '10과: 부정사', '~하기 위해 (-tuṃ)', '📐', 'basic', GRAMMAR_10_INFINITIVE),
     // 13과 특수동사+인칭변화: 교재 보충 (삼귀의)
