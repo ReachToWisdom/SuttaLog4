@@ -30,15 +30,17 @@ function getMonthStudyDates(year: number, month: number): Set<string> {
 
 export default function Stats() {
   return (
-    <div className="pb-20 px-4 pt-6 max-w-lg mx-auto">
-      <h1 className="text-xl font-bold mb-5" style={{ color: 'var(--color-text)' }}>
-        공부 기록
-      </h1>
+    <div className="min-h-screen pb-24" style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-text)' }}>
+      <div className="max-w-lg mx-auto px-4">
+      <div className="pt-[max(env(safe-area-inset-top),20px)] pb-4 animate-fadeIn">
+        <h1 className="text-2xl font-bold tracking-tight">공부 기록</h1>
+      </div>
       <StudyCalendar />
       <WeeklyChart />
       <AverageStats />
       <WordMastery />
       <WeakWordList />
+      </div>
     </div>
   )
 }
