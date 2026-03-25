@@ -75,7 +75,7 @@ export default function Settings() {
       setConfirmReset(true)
       return
     }
-    // suttalog3-로 시작하는 모든 키 삭제 (하나씩)
+    // suttalog4-로 시작하는 모든 키 삭제
     const keysToDelete = []
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i)
