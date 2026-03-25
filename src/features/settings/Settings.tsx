@@ -87,7 +87,7 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-text)' }}>
-      <div className="flex items-center gap-3 px-4 pt-4 pb-3 sticky top-0 z-10"
+      <div className="flex items-center gap-3 px-4 pt-4 pb-3 sticky top-0 z-10 max-w-lg mx-auto"
         style={{ borderBottom: '1px solid var(--color-border-light)', backgroundColor: 'var(--color-bg)' }}>
         <button onClick={() => nav(-1)}
           className="flex items-center justify-center w-8 h-8 rounded-full" style={{ backgroundColor: 'var(--color-surface)' }}>
@@ -98,7 +98,7 @@ export default function Settings() {
         <h1 className="text-lg font-bold">설정</h1>
       </div>
 
-      <div className="px-4 py-5 space-y-6 pb-safe animate-fadeIn">
+      <div className="px-4 py-5 space-y-6 pb-safe animate-fadeIn max-w-lg mx-auto">
         {/* 학습 */}
         <section>
           <SectionHeader>학습</SectionHeader>

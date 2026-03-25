@@ -19,7 +19,7 @@ export default function ProgressBar({ current, total, hearts, onClose, onBack }:
 
   return (
     <div
-      className="flex items-center gap-2.5 px-4 py-3 relative"
+      className="flex items-center gap-2.5 px-4 py-3 relative max-w-lg mx-auto w-full"
       style={{ background: 'var(--color-bg)' }}
     >
       {/* 닫기 — 원형 아이콘 */}

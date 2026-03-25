@@ -31,7 +31,7 @@ export default function VerseView({ step, onNext, onBack }: Props) {
 
   return (
     <div className="step-enter flex flex-col min-h-[calc(100vh-60px)]">
-      <div className="flex-1 px-4 py-4 overflow-y-auto pb-24 max-w-lg mx-auto w-full">
+      <div className="flex-1 px-4 py-4 overflow-y-auto pb-32 max-w-lg mx-auto w-full">
         {/* 노트 뱃지 */}
         {step.note && (
           <div className="mb-4">
@@ -205,9 +205,9 @@ export default function VerseView({ step, onNext, onBack }: Props) {
       </div>
 
       {/* 하단 고정 버튼 */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 px-4 py-3"
-        style={{ background: 'linear-gradient(0deg, var(--color-bg) 80%, transparent 100%)' }}>
-        <div className="flex gap-3 max-w-lg mx-auto">
+      <div className="fixed bottom-0 left-0 right-0 z-20 px-4 pt-3 pb-safe"
+        style={{ background: 'linear-gradient(0deg, var(--color-bg) 85%, transparent 100%)' }}>
+        <div className="flex gap-3 max-w-lg mx-auto pb-1">
           {onBack && (
             <button onClick={onBack} className="btn-secondary py-3 px-4">
               ←
