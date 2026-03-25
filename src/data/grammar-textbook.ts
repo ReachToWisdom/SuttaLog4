@@ -151,62 +151,44 @@ export const SANDHI_LESSON: Step[] = [
 ]
 
 // ══════════════════════════════════════════
-// 격변화 도표 인트로 — 교재 §1~§3 핵심
+// 격변화 도표 전체 — 교재 19개 도표 (요약 아님!)
 // ══════════════════════════════════════════
-export const DECLENSION_INTRO: Step[] = [
-  {
-    type: 'intro',
-    title: '격변화 도표',
-    subtitle: '명사의 8가지 격 — 빠알리 프라이머 §1',
-    description: '빠알리어 명사는 8가지 격으로 변합니다.\n주격(~은), 목적격(~을), 구격(~으로),\n탈격(~로부터), 여격(~에게), 소유격(~의),\n처소격(~에서), 호격(~이여)',
-    icon: '📐',
-  },
-  {
-    type: 'verse',
-    pali: '§1 -a 남성 격변화 (deva = 신)',
-    pronKo: '',
-    translation: '주격: devo / devā\n목적격: devaṃ / deve\n구격: devena / devehi\n탈격: devā, devasmā / devehi\n여격: devassa / devānaṃ\n소유격: devassa / devānaṃ\n처소격: deve, devasmiṃ / devesu\n호격: deva / devā',
-    words: [
-      { pali: 'devo', pronKo: '데워', meaning: '신은 (주격 단)', grammar: '-a → -o' },
-      { pali: 'devaṃ', pronKo: '데왕', meaning: '신을 (목적격 단)', grammar: '-a → -aṃ' },
-      { pali: 'devena', pronKo: '데웨나', meaning: '신에 의해 (구격 단)', grammar: '-a → -ena' },
-      { pali: 'devassa', pronKo: '데왓사', meaning: '신의 (소유격 단)', grammar: '-a → -assa' },
-      { pali: 'deve', pronKo: '데웨', meaning: '신에서 (처소격 단)', grammar: '-a → -e' },
-    ],
-    note: '§1 -a 남성 (가장 기본, 경전 대부분의 명사)',
-  },
-  {
-    type: 'verse',
-    pali: '§2 -a 중성 격변화 (rūpa = 물질)',
-    pronKo: '',
-    translation: '주격: rūpaṃ / rūpāni\n목적격: rūpaṃ / rūpāni\n(나머지는 남성과 동일)\n\n특징: 주격 = 목적격 (-ṃ)',
-    words: [
-      { pali: 'rūpaṃ', pronKo: '루-빵', meaning: '물질은/을', grammar: '주격=목적격 -ṃ' },
-      { pali: 'dukkhaṃ', pronKo: '둑캉', meaning: '고통은/을', grammar: '중성 주격=목적격' },
-      { pali: 'sukhaṃ', pronKo: '수캉', meaning: '행복은/을', grammar: '중성 주격=목적격' },
-    ],
-    note: '§2 -a 중성 (주격=목적격 -ṃ)',
-  },
-  {
-    type: 'verse',
-    pali: '§3 -ā 여성 격변화 (kaññā = 소녀)',
-    pronKo: '',
-    translation: '주격: kaññā / kaññā, kaññāyo\n목적격: kaññaṃ / kaññā, kaññāyo\n구격: kaññāya / kaññāhi\n소유격: kaññāya / kaññānaṃ\n처소격: kaññāya, kaññāyaṃ / kaññāsu',
-    words: [
-      { pali: 'kaññā', pronKo: '깐냐-', meaning: '소녀는 (주격)', grammar: '-ā 여성' },
-      { pali: 'vedanā', pronKo: '웨다나-', meaning: '느낌은', grammar: '-ā 여성 (오온)' },
-      { pali: 'taṇhā', pronKo: '딴하-', meaning: '갈애는', grammar: '-ā 여성 (사성제)' },
-    ],
-    note: '§3 -ā 여성 (vedanā, taṇhā, paññā 등)',
-  },
-  {
-    type: 'quiz',
-    question: '"devaṃ"은 무슨 격인가?',
-    options: ['목적격 (신을)', '주격 (신은)', '소유격 (신의)', '처소격 (신에서)'],
-    answer: 0,
-    explanation: { correct: 'devaṃ = deva + ṃ (목적격 단수) = "신을"' },
-  },
-]
+import { DECLENSION_TABLES } from './declension-tables'
+
+/** 격변화 도표 19개를 전체 학습 스텝으로 변환 */
+function buildDeclensionSteps(): Step[] {
+  const steps: Step[] = [
+    {
+      type: 'intro',
+      title: '격변화 도표 (전체)',
+      subtitle: '빠알리 프라이머 §1~§28 — 19개 도표',
+      description: '빠알리어 명사는 8가지 격으로 변합니다.\n주격(~은), 목적격(~을), 구격(~으로),\n탈격(~로부터), 여격(~에게), 소유격(~의),\n처소격(~에서), 호격(~이여)\n\n19개 전체 도표를 순서대로 봅니다.',
+      icon: '📐',
+    },
+  ]
+
+  for (const table of DECLENSION_TABLES) {
+    // 도표를 텍스트로 변환: "격: 단수 / 복수" 형식
+    const lines = table.rows.map(r => `${r.case}: ${r.sg} / ${r.pl}`)
+    steps.push({
+      type: 'verse',
+      pali: `${table.title} (${table.word} = ${table.meaning}) [${table.gender}]`,
+      pronKo: '',
+      translation: lines.join('\n'),
+      words: table.rows.slice(0, 4).map(r => ({
+        pali: r.sg.split(' / ')[0],
+        pronKo: '',
+        meaning: r.case.replace(/\(.*\)/, '').trim() + ' 단수',
+        grammar: table.word + ' ' + r.case,
+      })),
+      note: `${table.title} — ${table.word}(${table.meaning})`,
+    })
+  }
+
+  return steps
+}
+
+export const DECLENSION_INTRO: Step[] = buildDeclensionSteps()
 
 // ══════════════════════════════════════════
 // 동사 활용표 인트로 — 현재형 인칭변화
