@@ -35,69 +35,76 @@ function ChevronIcon({ open }: { open: boolean }) {
   )
 }
 
-// ── 문법 경로 데이터 ──
+// ── 문법 경로 데이터 (교재 32과 전체 + 경전) ──
 const GRAMMAR_SECTIONS = [
   { key: 'g-basic', title: '기초', items: [
-    { label: '자모와 발음 (모음 8 + 자음 33)', lesson: 'alphabet' },
+    { label: '자모와 발음 (모음 8 + 자음 33)', lesson: 'tb-00' },
+    { label: '연성법 (Sandhi ①~⑬)', lesson: 'tb-sandhi' },
+    { label: '격변화 도표 (전체 19개)', lesson: 'declension-ref' },
   ]},
   { key: 'g-case', title: '명사 격변화 (1-8과)', items: [
-    { label: '1과 주격·목적격·소유격·처소격', lesson: 'mangala-01', note: '행복경 서문' },
-    { label: '3과 구격: ~에 의해 (-ena/-ehi)', lesson: 'grammar-03', note: '교재 예문' },
-    { label: '4과 탈격: ~로부터 (-mhā/-smā)', lesson: 'grammar-04', note: '교재 예문' },
-    { label: '5과 여격: ~에게 (-ssa/-āya)', lesson: 'grammar-05', note: '교재 예문' },
-    { label: '6-7과 구격·여격 경전 복습', lesson: 'mangala-02', note: '행복경 2-3게송' },
-    { label: '8과 호격: ~이여 (-a/-ā)', lesson: 'grammar-08', note: '교재 bhikkhave' },
-    { label: '격변화 종합 연습', lesson: 'mangala-03', note: '행복경 4-6게송' },
+    { label: '1과: 주격 + 동사 (-o/-ā · -ti/-nti)', lesson: 'tb-01' },
+    { label: '2과: 목적격 (-ṃ/-e)', lesson: 'tb-02' },
+    { label: '★ 행복경 (1) 실전', lesson: 'mangala-01', note: '주격/목적격' },
+    { label: '3과: 구격 (-ena/-ehi)', lesson: 'tb-03' },
+    { label: '4과: 탈격 (-ā/-mhā/-smā)', lesson: 'tb-04' },
+    { label: '5과: 여격 (-āya/-ssa)', lesson: 'tb-05' },
+    { label: '6과: 소유격 (-ssa/-ānaṃ)', lesson: 'tb-06' },
+    { label: '★ 행복경 (2) 실전', lesson: 'mangala-02', note: '소유격/구격' },
+    { label: '7과: 처소격 (-e/-mhi/-smiṃ)', lesson: 'tb-07' },
+    { label: '8과: 호격 + 중성명사', lesson: 'tb-08' },
+    { label: '★ 행복경 (3) 실전', lesson: 'mangala-03', note: '격변화 종합' },
   ]},
-  { key: 'g-verb', title: '동사 + 분사 (9-13과)', items: [
-    { label: '9과 절대분사 (-tvā) + 동사 기초', lesson: 'mangala-04', note: '행복경 katvāna' },
-    { label: '10과 부정사: ~하기 위해 (-tuṃ)', lesson: 'grammar-10', note: '교재 예문' },
-    { label: '행복경 마무리', lesson: 'mangala-05', note: '행복경 10-12게송' },
-    { label: '13과 특수동사 + 삼귀의', lesson: 'grammar-13', note: '교재 atthi, karoti' },
+  { key: 'g-verb', title: '동사 활용 (9-13과)', items: [
+    { label: '9과: 절대분사 (-(i)tvā/-ya)', lesson: 'tb-09' },
+    { label: '★ 행복경 (4) 실전', lesson: 'mangala-04', note: '절대분사' },
+    { label: '10-11과: 부정사 + 현재분사', lesson: 'tb-10' },
+    { label: '12과: 동사 인칭변화 (1/2/3인칭)', lesson: 'tb-11' },
+    { label: '13과: -e/-nā 어간 동사', lesson: 'tb-12' },
+    { label: '★ 행복경 (5) 실전', lesson: 'mangala-05', note: '마무리' },
   ]},
-  { key: 'g-mangala', title: '★ 행복경 전문 독해', items: [
-    { label: '행복경 (1) 서문 + 제1게송', lesson: 'mangala-01' },
-    { label: '행복경 (2) 제2-3게송', lesson: 'mangala-02' },
-    { label: '행복경 (3) 제4-6게송', lesson: 'mangala-03' },
-    { label: '행복경 (4) 제7-9게송', lesson: 'mangala-04' },
-    { label: '행복경 (5) 제10-12게송', lesson: 'mangala-05' },
+  { key: 'g-tense', title: '시제 변화 (14-17과)', items: [
+    { label: '14과: 미래형 (-(i)ssa)', lesson: 'tb-13' },
+    { label: '15과: 원망형 (-eyya)', lesson: 'tb-14' },
+    { label: '16과: 명령형 (-atu/-hi)', lesson: 'tb-15' },
+    { label: '17과: 과거형 (Aorist)', lesson: 'tb-16' },
   ]},
-  { key: 'g-tense', title: '시제 + 여성명사 (14-18과)', items: [
-    { label: '18과 ā-여성명사 (vedanā, paññā)', lesson: 'grammar-18', note: '교재 예문' },
-    { label: '14-15과 미래형·원망형', lesson: 'ratana-01', note: '보배경에서' },
-    { label: '16-17과 명령형·과거형', lesson: 'ratana-02', note: '보배경에서' },
+  { key: 'g-fem', title: '여성명사 (18과)', items: [
+    { label: '18과: -ā 여성명사 (vanitā)', lesson: 'tb-17' },
   ]},
-  { key: 'g-ratana', title: '★ 보배경 · 자비경', items: [
+  { key: 'g-ratana', title: '★ 보배경 · 자비경 독해', items: [
     { label: '보배경 (1)', lesson: 'ratana-01' }, { label: '보배경 (2)', lesson: 'ratana-02' },
     { label: '보배경 (3)', lesson: 'ratana-03' }, { label: '보배경 (4)', lesson: 'ratana-04' },
     { label: '자비경 (1)', lesson: 'metta-01' }, { label: '자비경 (2)', lesson: 'metta-02' },
   ]},
-  { key: 'g-participle', title: '분사 심화 + 중성명사 (19-22과)', items: [
-    { label: '중성명사 (dukkhaṃ, rūpaṃ)', lesson: 'dhammacakka-01', note: '사성제' },
-    { label: '특수동사 (pajānāti)', lesson: 'dhammacakka-02', note: '전법륜경' },
-    { label: '미래수동분사 (-tabba)', lesson: 'dhammacakka-03', note: 'pariññeyyaṃ' },
+  { key: 'g-participle', title: '분사 (19-22과)', items: [
+    { label: '19과: 과거분사 (-(i)ta/-na)', lesson: 'tb-18' },
+    { label: '20과: -i/-ī 여성명사', lesson: 'tb-19' },
+    { label: '21과: 현재분사 여성형 (-ntī/-mānā)', lesson: 'tb-20' },
+    { label: '22과: 미래수동분사 (-tabba/-anīya)', lesson: 'tb-21' },
   ]},
-  { key: 'g-dhammacakka', title: '★ 전법륜경', items: [
+  { key: 'g-dhammacakka', title: '★ 전법륜경 독해', items: [
     { label: '전법륜경 (1)', lesson: 'dhammacakka-01' }, { label: '전법륜경 (2)', lesson: 'dhammacakka-02' },
     { label: '전법륜경 (3)', lesson: 'dhammacakka-03' }, { label: '전법륜경 (4)', lesson: 'dhammacakka-04' },
   ]},
-  { key: 'g-advanced', title: '고급 명사 + 오온 (23-29과)', items: [
-    { label: 'i/ī-여성명사', lesson: 'anatta-01', note: '무아경 오온' },
-    { label: '부정사 (-tuṃ)', lesson: 'anatta-01', note: 'samanupassituṃ' },
-    { label: '사역형 (-āpeti)', lesson: 'anatta-03', note: '무아경' },
-    { label: '자음어간 명사', lesson: 'anatta-04', note: '무아경' },
+  { key: 'g-advanced', title: '사역·기타 명사 (23-29과)', items: [
+    { label: '23과: 사역형 (-āpe/-āpaya)', lesson: 'tb-22' },
+    { label: '24-26과: 기타 명사 (-u여성·-i/-ī남성)', lesson: 'tb-23' },
+    { label: '27과: -u/-ū 남성명사 (bhikkhu)', lesson: 'tb-24' },
+    { label: '28과: 친족명사 (satthā/pitā/mātā)', lesson: 'tb-25' },
+    { label: '29과: -i/-u 중성명사 (aṭṭhi/cakkhu)', lesson: 'tb-26' },
   ]},
-  { key: 'g-anatta', title: '★ 무아경', items: [
+  { key: 'g-anatta', title: '★ 무아경 독해', items: [
     { label: '무아경 (1)', lesson: 'anatta-01' }, { label: '무아경 (2)', lesson: 'anatta-02' },
     { label: '무아경 (3)', lesson: 'anatta-03' }, { label: '무아경 (4)', lesson: 'anatta-04' },
   ]},
-  { key: 'g-dhammapada', title: '★ 법구경', items: [
-    { label: '법구경 (1)', lesson: 'dhammapada-01' }, { label: '법구경 (2)', lesson: 'dhammapada-02' },
+  { key: 'g-pronoun', title: '형용사·대명사 (30-32과)', items: [
+    { label: '30과: -vantu/-mantu (bhagavā)', lesson: 'tb-27' },
+    { label: '31과: 인칭대명사 (ahaṃ/tvaṃ)', lesson: 'tb-28' },
+    { label: '32과: 관계·지시·의문대명사 (yo/so/ko)', lesson: 'tb-29' },
   ]},
-  { key: 'g-pronoun', title: '대명사 · 복합어 (30-32과)', items: [
-    { label: '인칭대명사', lesson: 'satipatthana-01', note: '사념처경' },
-    { label: '지시·관계·의문대명사', lesson: 'satipatthana-02', note: '사념처경' },
-    { label: '복합어·접두사·접미사', lesson: 'satipatthana-03', note: '사념처경' },
+  { key: 'g-dhammapada', title: '★ 법구경 독해', items: [
+    { label: '법구경 (1)', lesson: 'dhammapada-01' }, { label: '법구경 (2)', lesson: 'dhammapada-02' },
   ]},
   { key: 'g-satipatthana', title: '★ 사념처경', items: [
     { label: '신념처 (1)', lesson: 'satipatthana-01' }, { label: '신념처 (2)', lesson: 'satipatthana-02' },
@@ -181,9 +188,9 @@ function GrammarList({ nav, search, openSections, setOpenSections }: {
   const q = search.toLowerCase().trim()
   return <>
     {GRAMMAR_SECTIONS.map(sec => {
-      const items = q ? sec.items.filter(it => it.label.toLowerCase().includes(q) || ((it as {note?:string}).note?.toLowerCase().includes(q) ?? false)) : sec.items
+      const items = q ? sec.items.filter(it => it.label.toLowerCase().includes(q) || ((it as {note?:string}).note?.toLowerCase().includes(q) ?? true)) : sec.items
       if (items.length === 0) return null
-      const isOpen = openSections[sec.key] ?? false
+      const isOpen = openSections[sec.key] ?? true
       const done = items.filter(it => getProgress(it.lesson) >= 100).length
 
       return (
@@ -252,7 +259,7 @@ function SuttaList({ nav, search, allLessons, openSections, setOpenSections }: {
     {CATEGORIES.map(cat => {
       const lessons = allLessons.filter(l => l.category === cat.key && (!q || l.title.toLowerCase().includes(q) || l.subtitle.toLowerCase().includes(q)))
       if (lessons.length === 0) return null
-      const isOpen = openSections[`s-${cat.key}`] ?? false
+      const isOpen = openSections[`s-${cat.key}`] ?? true
       const done = lessons.filter(l => getProgress(l.id) >= 100).length
 
       return (
