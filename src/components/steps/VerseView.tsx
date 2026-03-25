@@ -13,7 +13,7 @@ interface Props {
 
 export default function VerseView({ step, onNext, onBack }: Props) {
   const [grammarOpen, setGrammarOpen] = useState(true)
-  const [glossaryOpen, setGlossaryOpen] = useState(false)
+  const [glossaryOpen, setGlossaryOpen] = useState(true)
   const [highlightIdx, setHighlightIdx] = useState<number | null>(null)
   const showPron = isPronVisible()
 
@@ -31,7 +31,7 @@ export default function VerseView({ step, onNext, onBack }: Props) {
 
   return (
     <div className="step-enter flex flex-col min-h-[calc(100vh-60px)]">
-      <div className="flex-1 px-4 py-6 overflow-y-auto pb-24">
+      <div className="flex-1 px-4 py-4 overflow-y-auto pb-24 max-w-lg mx-auto w-full">
         {/* 노트 뱃지 */}
         {step.note && (
           <div className="mb-4">
@@ -65,34 +65,41 @@ export default function VerseView({ step, onNext, onBack }: Props) {
             <div className="flex-1 h-px" style={{ background: 'var(--color-primary-light)' }} />
           </div>
 
-          {/* 원문 + 발음 (단어별 1:1 매칭, 탭 시 하이라이트) */}
-          <div className="flex flex-wrap gap-x-3 gap-y-3 justify-center text-center">
-            {step.words.map((word, idx) => (
-              <span
-                key={idx}
-                onClick={() => handleWordTap(word, idx)}
-                className="inline-flex flex-col items-center cursor-pointer px-1 py-0.5 rounded-lg transition-all duration-200"
-                style={{
-                  background: highlightIdx === idx ? 'var(--color-primary-glow)' : 'transparent',
-                }}
-              >
+          {/* 원문 + 발음 */}
+          {step.words.length > 0 ? (
+            <div className="flex flex-wrap gap-x-3 gap-y-3 justify-center text-center">
+              {step.words.map((word, idx) => (
                 <span
-                  className="pali-text text-xl"
-                  style={{
-                    color: highlightIdx === idx ? 'var(--color-primary-dark)' : 'var(--color-text)',
-                    fontWeight: highlightIdx === idx ? 700 : 400,
-                  }}
+                  key={idx}
+                  onClick={() => handleWordTap(word, idx)}
+                  className="inline-flex flex-col items-center cursor-pointer px-1 py-0.5 rounded-lg transition-all duration-200"
+                  style={{ background: highlightIdx === idx ? 'var(--color-primary-glow)' : 'transparent' }}
                 >
-                  {word.pali}
-                </span>
-                {showPron && (
-                  <span className="text-xs mt-0.5" style={{ color: 'var(--color-primary)' }}>
-                    {word.pronKo}
+                  <span className="pali-text text-xl"
+                    style={{ color: highlightIdx === idx ? 'var(--color-primary-dark)' : 'var(--color-text)', fontWeight: highlightIdx === idx ? 700 : 400 }}>
+                    {word.pali}
                   </span>
-                )}
-              </span>
-            ))}
-          </div>
+                  {showPron && (
+                    <span className="text-xs mt-0.5" style={{ color: 'var(--color-primary)' }}>{word.pronKo}</span>
+                  )}
+                </span>
+              ))}
+            </div>
+          ) : (
+            /* words 없을 때 pali 텍스트 직접 표시 (교재 문법 등) */
+            <div className="text-center">
+              <p className="pali-text text-base leading-relaxed whitespace-pre-line"
+                style={{ color: 'var(--color-text)' }}
+                onClick={handleListenAll}>
+                {step.pali}
+              </p>
+              {showPron && step.pronKo && (
+                <p className="text-sm mt-2 whitespace-pre-line" style={{ color: 'var(--color-primary)' }}>
+                  {step.pronKo}
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         {/* 한국어 번역 */}
