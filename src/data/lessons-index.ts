@@ -47,19 +47,8 @@ import {
 } from './satipatthana-dhamma'
 import { genMeaningQuiz, genReverseQuiz } from './quiz-generator'
 import { getGrammarHintEnabled } from '../config'
-import {
-  ALPHABET_REFERENCE,
-  SANDHI_LESSON,
-  DECLENSION_INTRO,
-  VERB_INTRO,
-  GRAMMAR_03_INSTRUMENTAL,
-  GRAMMAR_04_ABLATIVE,
-  GRAMMAR_05_DATIVE,
-  GRAMMAR_08_VOCATIVE,
-  GRAMMAR_10_INFINITIVE,
-  GRAMMAR_13_SPECIAL_VERBS,
-  GRAMMAR_18_FEMININE,
-} from './grammar-textbook'
+import { DECLENSION_INTRO } from './grammar-textbook'
+import { TEXTBOOK_LESSONS } from './textbook-index'
 
 // ── 유틸리티 ──
 
@@ -162,7 +151,7 @@ function buildSuttaLesson(
 // ══════════════════════════════════════════
 // 1과: 자모와 발음
 // ══════════════════════════════════════════
-function buildAlphabet(): LessonInfo {
+export function buildAlphabet(): LessonInfo {
   const steps: Step[] = []
 
   steps.push({
@@ -416,51 +405,84 @@ function makeTextbookLesson(id: string, title: string, subtitle: string, icon: s
   return { id, title, subtitle, icon, category, steps }
 }
 
-/** 전체 과 목록 생성 — 문법 순서대로, 경전 사이에 교재 보충 삽입 */
+// 교재 과 ID → TEXTBOOK_LESSONS에서 찾기
+function tb(id: string): LessonInfo {
+  const found = TEXTBOOK_LESSONS.find(l => l.id === id)
+  if (!found) throw new Error(`교재 과 ${id} 없음`)
+  return found
+}
+
+/** 전체 과 목록 — 교재 32과 전체 + 격변화 도표 + 경전 독해 */
 export function buildAllLessons(): LessonInfo[] {
   return [
-    // ── 기초: 자모표 레퍼런스 + 자모 학습 + 연성법 ──
-    makeTextbookLesson('alphabet-ref', '자모표 (교재 요약)', '모음 8 + 자음 33 = 41자모', '📖', 'basic', ALPHABET_REFERENCE),
-    buildAlphabet(),
-    makeTextbookLesson('sandhi', '연성법 (Sandhi)', '단어 연결 규칙', '🔗', 'basic', SANDHI_LESSON),
-    // ── 격변화 도표 인트로 (교재 §1~§3) ──
-    makeTextbookLesson('declension-ref', '격변화 도표 (교재 요약)', '8격 × 남성/중성/여성', '📐', 'basic', DECLENSION_INTRO),
-    // ── 격변화 (1-8과) ──
-    buildMangala01(),
-    // 3과 구격: 교재 보충 (행복경에 부족)
-    makeTextbookLesson('grammar-03', '3과: 구격', '~에 의해, ~(으)로', '📐', 'basic', GRAMMAR_03_INSTRUMENTAL),
-    // 4과 탈격: 교재 보충
-    makeTextbookLesson('grammar-04', '4과: 탈격', '~로부터', '📐', 'basic', GRAMMAR_04_ABLATIVE),
-    // 5과 여격: 교재 보충
-    makeTextbookLesson('grammar-05', '5과: 여격', '~에게', '📐', 'basic', GRAMMAR_05_DATIVE),
-    // 6-7과(소유격/처소격): 행복경 2-3게송에서
-    buildMangala02(),
-    buildMangala03(),
-    // 8과 호격: 교재 보충 (행복경에 없음)
-    makeTextbookLesson('grammar-08', '8과: 호격', '~이여', '📐', 'basic', GRAMMAR_08_VOCATIVE),
-    // ── 행복경 나머지 ──
-    buildMangala04(),
-    buildMangala05(),
-    // ── 동사 활용표 인트로 ──
-    makeTextbookLesson('verb-ref', '동사 활용표 (교재 요약)', '현재형·과거형·미래형·명령형·원망형', '📐', 'basic', VERB_INTRO),
-    // ── 동사 (9-13과) ──
-    // 10과 부정사: 교재 보충 (행복경에 없음)
-    makeTextbookLesson('grammar-10', '10과: 부정사', '~하기 위해 (-tuṃ)', '📐', 'basic', GRAMMAR_10_INFINITIVE),
-    // 13과 특수동사+인칭변화: 교재 보충 (삼귀의)
-    makeTextbookLesson('grammar-13', '13과: 특수동사', 'atthi, karoti, 삼귀의', '📐', 'basic', GRAMMAR_13_SPECIAL_VERBS),
-    // ── 시제 + 여성명사 (14-18과) ──
-    // 18과 ā-여성명사: 교재 보충 (보배경/자비경 전에 필요)
-    makeTextbookLesson('grammar-18', '18과: ā-여성명사', 'vedanā, paññā, taṇhā', '📐', 'basic', GRAMMAR_18_FEMININE),
-    // ── 보배경 · 자비경 ──
+    // ══ 1장: 자모와 발음 ══
+    tb('tb-00'),                 // 교재 자모와 발음 (전체)
+    tb('tb-sandhi'),             // 교재 연성법 (전체)
+    // 격변화 도표 (전체 19개)
+    makeTextbookLesson('declension-ref', '격변화 도표 (전체)', '§1~§28 · 19개 도표', '📐', 'basic', DECLENSION_INTRO),
+
+    // ══ 2장: 남성명사 격변화 (1-8과) ══
+    tb('tb-01'),                 // 1과: 주격 + 동사
+    tb('tb-02'),                 // 2과: 목적격
+    buildMangala01(),            // ★ 행복경 (1) — 주격/목적격 실전
+    tb('tb-03'),                 // 3과: 구격
+    tb('tb-04'),                 // 4과: 탈격
+    tb('tb-05'),                 // 5과: 여격
+    tb('tb-06'),                 // 6과: 소유격
+    buildMangala02(),            // ★ 행복경 (2) — 소유격/구격 실전
+    tb('tb-07'),                 // 7과: 처소격
+    tb('tb-08'),                 // 8과: 호격 + 중성명사
+    buildMangala03(),            // ★ 행복경 (3) — 격변화 종합
+
+    // ══ 3장: 동사 활용 (9-13과) ══
+    tb('tb-09'),                 // 9과: 절대분사
+    buildMangala04(),            // ★ 행복경 (4) — 절대분사 실전
+    tb('tb-10'),                 // 10-11과: 부정사 + 현재분사
+    tb('tb-11'),                 // 12과: 동사 인칭변화
+    tb('tb-12'),                 // 13과: -e/-nā 어간
+    buildMangala05(),            // ★ 행복경 (5) — 마무리
+
+    // ══ 4장: 시제 변화 (14-17과) ══
+    tb('tb-13'),                 // 14과: 미래형
+    tb('tb-14'),                 // 15과: 원망형
+    tb('tb-15'),                 // 16과: 명령형
+    tb('tb-16'),                 // 17과: 과거형
+
+    // ══ 5장: 여성명사 (18과) ══
+    tb('tb-17'),                 // 18과: -ā 여성명사
+
+    // ★ 보배경 · 자비경 독해
     ...buildRatanaLessons(),
     ...buildMettaLessons(),
-    // ── 전법륜경 ──
+
+    // ══ 6장: 분사 (19-22과) ══
+    tb('tb-18'),                 // 19과: 과거분사
+    tb('tb-19'),                 // 20과: -i/-ī 여성명사
+    tb('tb-20'),                 // 21과: 현재분사 여성형
+    tb('tb-21'),                 // 22과: 미래수동분사
+
+    // ★ 전법륜경 독해
     ...buildDhammacakkaLessons(),
-    // ── 무아경 ──
+
+    // ══ 7장: 사역·기타 명사 (23-29과) ══
+    tb('tb-22'),                 // 23과: 사역형
+    tb('tb-23'),                 // 24-26과: 기타 명사
+    tb('tb-24'),                 // 27과: -u/-ū 남성명사
+    tb('tb-25'),                 // 28과: 친족명사
+    tb('tb-26'),                 // 29과: -i/-u 중성명사
+
+    // ★ 무아경 독해
     ...buildAnattaLessons(),
-    // ── 법구경 ──
+
+    // ══ 8장: 형용사·대명사 (30-32과) ══
+    tb('tb-27'),                 // 30과: -vantu/-mantu
+    tb('tb-28'),                 // 31과: 인칭대명사
+    tb('tb-29'),                 // 32과: 관계·지시·의문대명사
+
+    // ★ 법구경 독해
     ...buildDhammapadaLessons(),
-    // ── 사념처경 ──
+
+    // ★ 사념처경 독해
     ...buildKayaLessons(),
     ...buildDhammaLessons(),
   ]
